@@ -11,8 +11,13 @@
 
 
 //add your includes for the project Blitzdings here
+
 #include <Arduino.h>
 #include <FastLED.h>
+//#ifdef LPD6803_DEF
+#include <LPD6803.h>
+#include <TimerOne.h>
+//#endif
 #include "controller.h"
 #include "defines.h"
 //end of add your includes here

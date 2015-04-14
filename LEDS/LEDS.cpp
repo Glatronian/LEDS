@@ -9,7 +9,10 @@ CRGB fleds[NUM_LEDS];
 uint8_t PARAMETER[232];
 uint8_t RECEIVEBUFFER[64];
 leds::controller CONTROLLER;
-
+#ifdef LPD6803_DEF
+LPD6803 strip = LPD6803(NUM_LEDS, DATA_PIN, CLOCK_PIN);
+CRGB* ptr;
+#endif
 
 
 void setup(){
@@ -25,7 +28,9 @@ void setup(){
 	FastLED.show();
 #endif
 #ifdef LPD6803_DEF
-
+strip.setCPUmax(50);
+strip.begin();
+strip.show();
 #endif
 
 }
@@ -37,6 +42,10 @@ void loop() {
 	FastLED.show();
 #endif
 #ifdef LPD6803_DEF
-
+	ptr = fleds;
+	for(uint8_t i = 0; i < NUM_LEDS; i++){
+		strip.setPixelColor(i, ptr->r, ptr->g, ptr->b);
+	}
+	strip.show();
 #endif
 }

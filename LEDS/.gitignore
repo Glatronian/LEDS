@@ -1,3 +1,6 @@
+/Release/
 /.settings/
-/.project
 /.cproject
+/.project
+/spec.d
+/.settings/org.eclipse.cdt.core.prefs

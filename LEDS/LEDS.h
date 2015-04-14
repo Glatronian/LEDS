@@ -14,6 +14,7 @@
 #include <Arduino.h>
 #include <FastLED.h>
 #include "controller.h"
+#include "defines.h"
 //end of add your includes here
 
 

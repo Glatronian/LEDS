@@ -10,8 +10,8 @@
 
 #define NUM_LEDS 80
 #define DATA_PIN 50
-#define LP6803
-#define WS8211
+#define LPD6803_DEF
+#define WS2811_DEF
 //PARAMETERfeld
 #define EVENTS PARAMETER[0]
 #define PATTERNS PARAMETER[1]

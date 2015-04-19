@@ -24,7 +24,7 @@ private:
 	uint8_t* RECEIVEBUFFER;
 	//int NUM_LEDS;
 	uint8_t inCounter;
-	uint8_t bools = 0;
+	uint8_t bools;
 
 	uint8_t colorchange;
 	CRGB colors[8];

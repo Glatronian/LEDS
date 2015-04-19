@@ -11,7 +11,7 @@
 #define NUM_LEDS 80
 #define DATA_PIN 50
 #define CLOCK_PIN 51
-#define LPD6803_DEF
+//#define LPD6803_DEF
 #define WS2811_DEF
 //PARAMETERfeld
 #define EVENTS PARAMETER[0]

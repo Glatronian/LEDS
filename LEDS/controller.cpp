@@ -38,7 +38,7 @@ void controller::init(CRGB* LEDS, uint8_t * PARAMETER, uint8_t * RECEIVEBUFFER){
 
 	PATTERNS = 255;
 	BPM = 60;
-
+	bools = 0;
 	pattern1.init(colors, this->LEDS, NUM_LEDS, PARAMETER);
 }
 void controller::communication(){

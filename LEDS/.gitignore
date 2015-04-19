@@ -4,3 +4,5 @@
 /.project
 /spec.d
 /.settings/org.eclipse.cdt.core.prefs
+/cxas.h
+/Helper.txt

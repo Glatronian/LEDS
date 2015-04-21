@@ -32,17 +32,23 @@ void controller::init(CRGB* LEDS, uint8_t * PARAMETER, uint8_t * RECEIVEBUFFER){
 		colors[i] = 0;
 		colorsbuf[i] = 0;
 	}
-	colors[0] = CRGB::Red;
-	colors[1] = CRGB::ForestGreen;
-	colors[2] = CRGB::Blue;
+	colors[0] = CRGB::DarkBlue;
+	colors[1] = CRGB::DarkGoldenrod;
+	colors[2] = CRGB::DarkGreen;
+	colors[3] = CRGB::Maroon;
+	colors[4] = CRGB::MidnightBlue;
+	colors[5] = CRGB::Beige;
+	colors[6] = CRGB::White;
 
-	PATTERNS = 255;
+	FastLED.setCorrection(0xFF4F4F);
+	PATTERNS = 1;
 	BPM = 60;
 	bools = 0;
 	pattern1.init(colors, this->LEDS, NUM_LEDS, PARAMETER);
+	pattern2.init(colors, this->LEDS, NUM_LEDS, PARAMETER);
 }
 void controller::communication(){
-	Serial.write(1);
+	/*Serial.write(1);
 	_delay_us(200);
 	inCounter = 0;
 	bools = 0;
@@ -56,7 +62,26 @@ void controller::communication(){
 		else
 			delayMicroseconds(200);
 			bools = 1;
+	}*/
+	Serial.write(1);
+	_delay_us(200);
+	uint16_t inCounter = 0;
+	uint8_t bools = 0;
+	uint8_t available = Serial.available();
+	while(available > 0 && !(bools == 3))
+	{
+		if(available <= 1){
+			_delay_us(200);
+			bools += 1;
+			}
+		else{
+			RECEIVEBUFFER[inCounter] = Serial.read();
+			RECEIVEBUFFER[inCounter+1] = Serial.read();
+			inCounter += 2;
+		}
+		available = Serial.available();
 	}
+
 	//Debug
 
 
@@ -69,13 +94,18 @@ void controller::communication(){
 			break;
 		case 1:
 			PATTERNS = RECEIVEBUFFER[i + 1];
+			for(int i = 0; i < NUM_LEDS; i++){
+				LEDS[i] = CRGB::Black;
+			}
 			break;
 		case 2:
 			BPM = RECEIVEBUFFER[i+1];
 			break;
 		case 3:
-			GPARAM3 = RECEIVEBUFFER[i+1];
+			BRIGHTNESS = RECEIVEBUFFER[i+1];
+			FastLED.setBrightness(BRIGHTNESS);
 			break;
+///////////Pattern1///////////////
 		case 4:
 			P1_TYPE = RECEIVEBUFFER[i+1];
 			break;
@@ -86,20 +116,22 @@ void controller::communication(){
 			P1_COLOR = RECEIVEBUFFER[i+1];
 			break;
 		case 7:
-			P2_PARAM1 = RECEIVEBUFFER[i+1];
+			P1_PARAM4 = RECEIVEBUFFER[i+1];
 			break;
+////////////Pattern2//////////////
 		case 8:
-			P2_PARAM2 = RECEIVEBUFFER[i+1];
+			P2_TYPE = RECEIVEBUFFER[i+1];
 			break;
 		case 9:
-			P2_PARAM3 = RECEIVEBUFFER[i+1];
+			P2_COLOR1 = RECEIVEBUFFER[i+1];
 			break;
 		case 10:
-			P3_PARAM1 = RECEIVEBUFFER[i+1];
+			P2_COLOR2 = RECEIVEBUFFER[i+1];
 			break;
 		case 11:
-			P3_PARAM2 = RECEIVEBUFFER[i+1];
+			P2_COLOR3 = RECEIVEBUFFER[i+1];
 			break;
+/////////////Pattern3///////////////
 		case 12:
 			P3_PARAM3 = RECEIVEBUFFER[i+1];
 			break;
@@ -210,8 +242,8 @@ void controller::caller(){
 	timeDelta = millis()-timeOld;
 	timeOld = millis();
 	//First check if pattern active then check if event or fade
-	if(PATTERNS%2){
-		if(EVENTS%2){
+	if(PATTERNS & 0b1){
+		if((EVENTS & 0b1) == 1){
 			pattern1.eventDetected();
 		}
 		else
@@ -219,13 +251,15 @@ void controller::caller(){
 			pattern1.eventFade(&timeDelta);
 		}
 	}
-	if((PATTERNS >> 1)%2){
-		if((EVENTS >> 1)%2){
+	if((PATTERNS >> 1) & 0b1 == 1){
+		if((EVENTS >> 1) & 0b1 == 1){
 			//pattern2
+			pattern2.eventDetected();
 		}
 		else
 		{
 			//pattern2
+			pattern2.eventFade(&timeDelta);
 		}
 	}
 	if((PATTERNS >> 2)%2){

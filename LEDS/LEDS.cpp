@@ -19,7 +19,7 @@ void setup(){
 	//controller.initController();
 	pinMode(13, OUTPUT);
 	digitalWrite(13, LOW);
-	Serial.begin(115200);
+	Serial.begin(57600);
 	CONTROLLER.init(fleds, PARAMETER, RECEIVEBUFFER);
 
 #ifdef WS2811_DEF

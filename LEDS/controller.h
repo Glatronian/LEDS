@@ -13,6 +13,7 @@
 #include <FastLED.h>
 #include "defines.h"
 #include "Wabern.h"
+#include "ColorSwitch.h"
 //end of add your includes here
 
 namespace leds {
@@ -34,6 +35,7 @@ private:
 	long timeOld;
 
 	Wabern pattern1;
+	ColorSwitch pattern2;
 
 
 public:

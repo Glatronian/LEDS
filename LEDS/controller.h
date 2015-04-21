@@ -14,6 +14,7 @@
 #include "defines.h"
 #include "Wabern.h"
 #include "ColorSwitch.h"
+#include "Balls.h"
 //end of add your includes here
 
 namespace leds {
@@ -36,6 +37,7 @@ private:
 
 	Wabern pattern1;
 	ColorSwitch pattern2;
+	Balls pattern3;
 
 
 public:

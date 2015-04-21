@@ -12,7 +12,7 @@ Wabern::Wabern(CRGB *colors, CRGB *leds, uint16_t length, uint8_t * parameter) {
 
 }
 Wabern::Wabern(){
-
+	farbwert = 0;
 }
 
 Wabern::~Wabern() {
@@ -26,6 +26,7 @@ void Wabern::init(CRGB *colors, CRGB *leds, uint16_t length, uint8_t * parameter
 	P1_TYPE = 0;
 	P1_COLOR = 0;
 	P1_TIME = 255;
+	farbwert = CRGB(0,0,0);
 }
 void Wabern::eventDetected(){
 	CRGB* ptr = ptrleds;

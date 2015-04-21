@@ -15,6 +15,7 @@
 #include "Pattern.h"
 
 class Wabern: public Pattern {
+	friend class Balls;
 private:
 	void standardWave(long *deltaT);
 	void rectangleWave(long *deltaT);
@@ -34,11 +35,12 @@ protected:
 	float dFarbeb;
 	long deltaTime;
 	long deltaTimePassed;
-	CRGB farbwert;
+
 	uint32_t time;
 	uint32_t dtime;
 
 public:
+	CRGB farbwert;
 	Wabern(CRGB *colors, CRGB *leds, uint16_t length, uint8_t * parameter);
 	Wabern();
 	virtual ~Wabern();

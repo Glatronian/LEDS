@@ -41,28 +41,17 @@ void controller::init(CRGB* LEDS, uint8_t * PARAMETER, uint8_t * RECEIVEBUFFER){
 	colors[6] = CRGB::White;
 
 	FastLED.setCorrection(0xFF4F4F);
-	PATTERNS = 1;
+	PATTERNS = 255;
 	BPM = 60;
 	bools = 0;
 	pattern1.init(colors, this->LEDS, NUM_LEDS, PARAMETER);
 	pattern2.init(colors, this->LEDS, NUM_LEDS, PARAMETER);
+	pattern3.init(colors, this->LEDS, NUM_LEDS, PARAMETER, &(pattern1.farbwert));
+	//long test = 800;
+	//pattern3.eventDetected();
+	//pattern3.eventFade(&test);
 }
 void controller::communication(){
-	/*Serial.write(1);
-	_delay_us(200);
-	inCounter = 0;
-	bools = 0;
-	while(Serial.available() > 0 && !bools)
-	{
-		if(Serial.available() > 1){
-			RECEIVEBUFFER[inCounter] = Serial.read();
-			RECEIVEBUFFER[inCounter+1] = Serial.read();
-			inCounter += 2;
-		}
-		else
-			delayMicroseconds(200);
-			bools = 1;
-	}*/
 	Serial.write(1);
 	_delay_us(200);
 	uint16_t inCounter = 0;
@@ -133,16 +122,16 @@ void controller::communication(){
 			break;
 /////////////Pattern3///////////////
 		case 12:
-			P3_PARAM3 = RECEIVEBUFFER[i+1];
+			P3_TYPE = RECEIVEBUFFER[i+1];
 			break;
 		case 13:
-			P4_PARAM1 = RECEIVEBUFFER[i+1];
+			P3_TEMPO = RECEIVEBUFFER[i+1];
 			break;
 		case 14:
-			P4_PARAM2 = RECEIVEBUFFER[i+1];
+			P3_COLOR = RECEIVEBUFFER[i+1];
 			break;
 		case 15:
-			P4_PARAM3 = RECEIVEBUFFER[i+1];
+			P3_END = RECEIVEBUFFER[i+1];
 			break;
 		case 16:
 			P5_PARAM1 = RECEIVEBUFFER[i+1];
@@ -262,13 +251,17 @@ void controller::caller(){
 			pattern2.eventFade(&timeDelta);
 		}
 	}
-	if((PATTERNS >> 2)%2){
-		if((EVENTS >> 2)%2){
+	if((PATTERNS >> 2) & 0b1){
+		if((EVENTS >> 2) & 0b1 == 1){
 			//pattern3
+			//Serial.write(2);
+			pattern3.eventDetected();
 		}
 		else
 		{
 			//pattern3
+			//Serial.write(2);
+			pattern3.eventFade(&timeDelta);
 		}
 	}
 	if((PATTERNS >> 3)%2){

@@ -25,8 +25,9 @@ void Wabern::init(CRGB *colors, CRGB *leds, uint16_t length, uint8_t * parameter
 	this->PARAMETER = parameter;
 	P1_TYPE = 0;
 	P1_COLOR = 0;
-	P1_TIME = 255;
+	P1_TIME = 60;
 	farbwert = CRGB(0,0,0);
+	setter = 0;
 }
 void Wabern::eventDetected(){
 	CRGB* ptr = ptrleds;
@@ -48,9 +49,9 @@ void Wabern::eventDetected(){
 		for(int i = 0; i < numLeds; i++)
 		{
 
-			ptr->r = qadd8(ptr->r, farbwert.r);
-			ptr->g = qadd8(ptr->g, farbwert.g);
-			ptr->b = qadd8(ptr->b, farbwert.b);
+			ptr->r =farbwert.r;
+			ptr->g =farbwert.g;
+			ptr->b =farbwert.b;
 			ptr++;
 		}
 
@@ -133,8 +134,6 @@ void Wabern::standardWave(long *deltaT)
 
 		dFarbeb = 0;
 	}
-
-
 
 
 }

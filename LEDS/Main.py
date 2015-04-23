@@ -241,6 +241,7 @@ def reader():
             if Port.inWaiting()>0:
                 b = list(bytearray(Port.read(), "hex"))
                 if int(b[0]) == 1 and len(sendbyte)>0:
+                    sleep(0.0005)
                     Port.write(sendbyte)
                     length = len(sendbyte)
                     temp = int(lbStatistics.get(5))+length

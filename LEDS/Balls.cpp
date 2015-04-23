@@ -154,7 +154,7 @@ void Balls::eventFade(long * deltaT){
 	switch (P3_TYPE)
 	{
 	case 0:
-		fader(deltaT);
+		fader0(deltaT);
 		break;
 	case 1:
 
@@ -164,7 +164,7 @@ void Balls::eventFade(long * deltaT){
 		break;
 	}
 }
-void Balls::fader(long * deltaT){
+void Balls::fader0(long * deltaT){
 	delta = delta + *deltaT;
 	//Serial.write(delta);
 	if(delta >= P3_TEMPO ){

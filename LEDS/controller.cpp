@@ -1,5 +1,5 @@
 /*
- *   co ntroller.cpp
+ 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 AAA^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                                             *   co ntroller.cpp
  *
  *  Created on: 12.04.2015
  *      Author: Christoph
@@ -43,6 +43,7 @@ void controller::init(CRGB* LEDS, uint8_t * PARAMETER, uint8_t * RECEIVEBUFFER){
 	FastLED.setCorrection(0xFF4F4F);
 	PATTERNS = 255;
 	BPM = 60;
+	BRIGHTNESS = 255;
 	bools = 0;
 	pattern1.init(colors, this->LEDS, NUM_LEDS, PARAMETER);
 	pattern2.init(colors, this->LEDS, NUM_LEDS, PARAMETER);
@@ -52,27 +53,62 @@ void controller::init(CRGB* LEDS, uint8_t * PARAMETER, uint8_t * RECEIVEBUFFER){
 	//pattern3.eventFade(&test);
 }
 void controller::communication(){
+	interrupts();
 	Serial.write(1);
-	_delay_us(200);
+	delayMicroseconds(2000);
 	uint16_t inCounter = 0;
 	uint8_t bools = 0;
 	uint8_t available = Serial.available();
+	if(available > 0){
+		delay(3);
+	}
 	while(available > 0 && !(bools == 3))
 	{
-		if(available <= 1){
-			_delay_us(200);
-			bools += 1;
-			}
-		else{
+		if(available % 2){
+			delay(1);
+		}
+		if(available == 1)
+			bools+=1;
+		if(available > 1)
+		{
 			RECEIVEBUFFER[inCounter] = Serial.read();
 			RECEIVEBUFFER[inCounter+1] = Serial.read();
 			inCounter += 2;
+			bools = 0;
+			delayMicroseconds(600);
 		}
 		available = Serial.available();
+		/*if(available != 1)
+			Serial.write(available);
+		else{
+			Serial.write(255);
+		}*/
 	}
+	if(available == 1){
+		Serial.read();
+		inCounter--;
+	}
+	/*Serial.write(1);
+		_delay_us(600);
+		uint16_t inCounter = 0;
+		uint8_t bools = 0;
+		uint8_t available = Serial.available();
+		while(available > 0 && !(bools == 3))
+		{
+			if(available < 1){
+				_delay_us(800);
+				bools += 1;
 
+			}
+			else{
+				RECEIVEBUFFER[inCounter] = Serial.read();
+				RECEIVEBUFFER[inCounter+1] = Serial.read();
+				inCounter += 1;
+			}
+			available = Serial.available();
+		}*/
+	noInterrupts();
 	//Debug
-
 
 	//Zuweisen
 	for(int i = 0; i < inCounter; i += 2)
@@ -86,6 +122,20 @@ void controller::communication(){
 			for(int i = 0; i < NUM_LEDS; i++){
 				LEDS[i] = CRGB::Black;
 			}
+
+			if((PATTERNS==2)){
+				pattern1.farbwert = CRGB::Black;
+				EVENTS = 2;
+				FastLED.setBrightness(50);
+			}
+			if(PATTERNS==4)
+			{
+				pattern1.farbwert = CRGB::Black;
+			}
+			else{
+				FastLED.setBrightness(BRIGHTNESS);
+			}
+
 			break;
 		case 2:
 			BPM = RECEIVEBUFFER[i+1];
@@ -103,6 +153,10 @@ void controller::communication(){
 			break;
 		case 6:
 			P1_COLOR = RECEIVEBUFFER[i+1];
+			pattern1.farbwert = CRGB::Black;
+			for(int i = 0; i < NUM_LEDS; i++){
+				LEDS[i] = CRGB::Black;
+			}
 			break;
 		case 7:
 			P1_PARAM4 = RECEIVEBUFFER[i+1];
@@ -113,6 +167,7 @@ void controller::communication(){
 			break;
 		case 9:
 			P2_COLOR1 = RECEIVEBUFFER[i+1];
+			//pattern1.farbwert = CRGB::Black;
 			break;
 		case 10:
 			P2_COLOR2 = RECEIVEBUFFER[i+1];
@@ -129,12 +184,14 @@ void controller::communication(){
 			break;
 		case 14:
 			P3_COLOR = RECEIVEBUFFER[i+1];
+			//pattern1.farbwert = CRGB::Black;
 			break;
 		case 15:
 			P3_END = RECEIVEBUFFER[i+1];
 			break;
 		case 16:
 			P5_PARAM1 = RECEIVEBUFFER[i+1];
+			digitalWrite(53, LOW);
 			break;
 		case 17:
 			P5_PARAM2 = RECEIVEBUFFER[i+1];

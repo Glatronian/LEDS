@@ -35,7 +35,7 @@ protected:
 	float dFarbeb;
 	long deltaTime;
 	long deltaTimePassed;
-
+	uint8_t setter;
 	uint32_t time;
 	uint32_t dtime;
 

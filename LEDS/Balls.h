@@ -69,7 +69,8 @@ public:
 	void  init(CRGB *colors, CRGB *leds, uint16_t length, uint8_t * parameter, CRGB *farbwertin);
 	void  eventDetected();
 	void  eventFade(long *deltaT);
-	void  fader(long *deltaT);
+	void  fader0(long *deltaT);
+	void  fader1(long *deltaT);
 };
 
 

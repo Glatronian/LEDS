@@ -17,6 +17,8 @@ CRGB* ptr;
 
 void setup(){
 	//controller.initController();
+	digitalWrite(53, HIGH);
+	pinMode(53, OUTPUT);
 	pinMode(13, OUTPUT);
 	digitalWrite(13, LOW);
 	Serial.begin(57600);
